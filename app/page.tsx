@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function Home() {
   const [name, setName] = useState("");
