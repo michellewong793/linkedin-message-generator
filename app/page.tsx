@@ -1,6 +1,6 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -31,7 +31,8 @@ export default function Home() {
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex flex-1 w-full max-w-3xl flex-col gap-8 py-32 px-16 bg-white dark:bg-black">
-        <h1 className="text-2xl font-bold">LinkedIn Message Generator</h1>
+        
+        <h1 className="text-2xl font-bold">Generate personalized LinkedIn message</h1>
 
         <div className="flex flex-col gap-4">
           <input
