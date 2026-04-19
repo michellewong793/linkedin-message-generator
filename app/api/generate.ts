@@ -1,9 +1,9 @@
 import { generateText, tool, stepCountIs } from 'ai';
-import { createGateway } from '@ai-sdk/gateway';
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
 import { z } from 'zod';
 
-const gateway = createGateway({
-    apiKey: process.env.AI_GATEWAY_API_KEY,
+const openrouter = createOpenRouter({
+    apiKey: process.env.OPENROUTER_API_KEY,
 });
 
 const scrapeCompanyWebsite = tool({
@@ -36,14 +36,14 @@ const scrapeCompanyWebsite = tool({
 
 export async function POST(request: Request) {
     try {
-        const { name, company, title } = await request.json();
+        const { name, company, title, reason } = await request.json();
         const companyUrl = `https://www.${company.toLowerCase().replace(/\s+/g, '')}.com`;
         const { text } = await generateText({
-            model: gateway('anthropic/claude-sonnet-4.6'),
+            model: openrouter('anthropic/claude-sonnet-4.5'),
             tools: { scrapeCompanyWebsite },
             stopWhen: stepCountIs(3),
             system: 'You are a Vercel sales assistant. When given a task, execute it immediately using the available tools. Never ask for clarification — all required information is provided. Return only the final output with no preamble.',
-            prompt: `Scrape ${companyUrl} using the scrapeCompanyWebsite tool and look for signals that ${company} is investing in AI (job postings, blog posts, product features, partnerships). Then write a LinkedIn outreach message to ${name} (${title} at ${company}) that references any AI signals found and invites them to learn how Vercel can accelerate their AI efforts. Under 300 characters, no explanations.`,
+            prompt: `Scrape ${companyUrl} using the scrapeCompanyWebsite tool and look for signals that ${company} is investing in AI (job postings, blog posts, product features, partnerships). Then write a LinkedIn outreach message to ${name} (${title} at ${company}). The reason for reaching out is: "${reason}". Reference that reason and any relevant AI signals found, and explain how Vercel can help. Under 300 characters, no explanations.`,
         });
         return Response.json({ text });
     } catch (err) {
