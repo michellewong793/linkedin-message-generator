@@ -1,9 +1,9 @@
 import { generateText, tool, stepCountIs } from 'ai';
-import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { createGateway } from '@ai-sdk/gateway';
 import { z } from 'zod';
 
-const openrouter = createOpenRouter({
-    apiKey: process.env.OPENROUTER_API_KEY,
+const gateway = createGateway({
+    apiKey: process.env.AI_GATEWAY_API_KEY,
 });
 
 const scrapeCompanyWebsite = tool({
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
         const { name, company, title, reason } = await request.json();
         const companyUrl = `https://www.${company.toLowerCase().replace(/\s+/g, '')}.com`;
         const { text } = await generateText({
-            model: openrouter('anthropic/claude-sonnet-4.5'),
+            model: gateway('anthropic/claude-sonnet-4-5'),
             tools: { scrapeCompanyWebsite },
             stopWhen: stepCountIs(3),
             system: 'You are a Vercel sales assistant. When given a task, execute it immediately using the available tools. Never ask for clarification — all required information is provided. Return only the final output with no preamble.',

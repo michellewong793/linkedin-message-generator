@@ -12,12 +12,15 @@ export default function CallPrepPage() {
   const [prep, setPrep] = useState<CallPrep | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   async function handleSearch() {
     if (!company.trim()) return;
     setLoading(true);
     setPrep(null);
     setError(null);
+    setSaved(false);
 
     const res = await fetch("/api/call-prep", {
       method: "POST",
@@ -32,6 +35,22 @@ export default function CallPrepPage() {
       setPrep(data);
     }
     setLoading(false);
+  }
+
+  async function handleSave() {
+    if (!prep) return;
+    setSaving(true);
+    await fetch("/api/action-items", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "call_prep",
+        company: company.trim(),
+        notes: prep,
+      }),
+    });
+    setSaved(true);
+    setSaving(false);
   }
 
   return (
@@ -103,6 +122,16 @@ export default function CallPrepPage() {
                 ))}
               </ol>
             </section>
+
+            <button
+              onClick={handleSave}
+              disabled={saving || saved}
+              className="flex h-10 w-fit items-center justify-center rounded-full px-5 text-sm font-medium transition-colors disabled:opacity-60
+                bg-green-200 text-green-800 hover:bg-green-100/70
+                dark:bg-green-900/40 dark:text-green-300 dark:hover:bg-green-900/20"
+            >
+              {saved ? "✓ Added to Today's Action Items" : saving ? "Saving..." : "Add to Today's Action Items"}
+            </button>
           </div>
         )}
       </main>

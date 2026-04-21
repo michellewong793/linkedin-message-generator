@@ -32,7 +32,7 @@ export default function RootLayout({
     >
       <SpeedInsights/>
       <body className="min-h-full flex">
-        <Suspense fallback={<div className="w-48 shrink-0" />}>
+        <Suspense fallback={<div className="w-48 shrink-0 border-r border-zinc-200 dark:border-zinc-800" />}>
           <NavBar />
         </Suspense>
         <div className="flex flex-col flex-1 min-w-0">

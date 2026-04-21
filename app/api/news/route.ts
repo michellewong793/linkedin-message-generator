@@ -1,8 +1,8 @@
 import { generateText, tool, stepCountIs } from 'ai';
-import { createOpenRouter } from '@openrouter/ai-sdk-provider';
-
-const openrouter = createOpenRouter({ apiKey: process.env.OPENROUTER_API_KEY });
+import { createGateway } from '@ai-sdk/gateway';
 import { z } from 'zod';
+
+const gateway = createGateway({ apiKey: process.env.AI_GATEWAY_API_KEY });
 
 const scrapeUrl = tool({
     description: 'Fetch and extract text content from a URL',
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
             companies.map(async (company: string) => {
                 const searchUrl = `https://techcrunch.com/search/?q=${encodeURIComponent(company + ' funding')}`;
                 const { text } = await generateText({
-                    model: openrouter('anthropic/claude-haiku-4-5'),
+                    model: gateway('anthropic/claude-haiku-4-5'),
                     tools: { scrapeUrl },
                     stopWhen: stepCountIs(2),
                     system: 'You are a funding news researcher. Use the scrapeUrl tool to fetch news, then summarize any funding rounds, investments, or fundraising activity you find. If nothing is found, say so clearly. Be concise (under 200 words).',

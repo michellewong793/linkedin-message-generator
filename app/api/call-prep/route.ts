@@ -1,5 +1,5 @@
 import { generateText, tool, stepCountIs } from 'ai';
-import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { createGateway } from '@ai-sdk/gateway';
 import { cacheLife } from 'next/cache';
 import { z } from 'zod';
 
@@ -7,7 +7,7 @@ async function getCallPrep(company: string) {
     'use cache';
     cacheLife('days');
 
-    const openrouter = createOpenRouter({ apiKey: process.env.OPENROUTER_API_KEY });
+    const gateway = createGateway({ apiKey: process.env.AI_GATEWAY_API_KEY });
 
     const scrapeUrl = tool({
         description: 'Fetch and extract text content from a URL',
@@ -37,7 +37,7 @@ async function getCallPrep(company: string) {
 
     const companyUrl = `https://www.${company.toLowerCase().replace(/\s+/g, '')}.com`;
     const { text } = await generateText({
-        model: openrouter('anthropic/claude-haiku-4-5'),
+        model: gateway('anthropic/claude-haiku-4-5'),
         tools: { scrapeUrl },
         stopWhen: stepCountIs(2),
         system: 'You are a sales call prep assistant for a Vercel AE. Use the scrapeUrl tool to research the company, then return a JSON object with exactly these keys: "context" (3-4 sentence company overview relevant to a sales call), "painPoints" (array of 3 likely pain points related to web infrastructure, performance, or developer experience), "discoveryQuestions" (array of 5 sharp discovery questions an AE would ask). Return only valid JSON, no markdown.',

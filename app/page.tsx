@@ -18,11 +18,14 @@ export default function Home() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   async function handleGenerate() {
     setLoading(true);
     setMessage(null);
     setError(null);
+    setSaved(false);
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -35,6 +38,24 @@ export default function Home() {
       setMessage(data.text);
     }
     setLoading(false);
+  }
+
+  async function handleSave() {
+    if (!message) return;
+    setSaving(true);
+    await fetch("/api/action-items", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "linkedin_message",
+        company,
+        contact_name: name,
+        contact_title: title,
+        notes: { message, reason },
+      }),
+    });
+    setSaved(true);
+    setSaving(false);
   }
 
   return (
@@ -74,11 +95,18 @@ export default function Home() {
             </select>
           </div>
           <button
-            className="flex h-12 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] disabled:opacity-50"
+            className="flex h-12 items-center justify-center gap-2 rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] disabled:opacity-50"
             onClick={handleGenerate}
             disabled={loading || !name || !company || !title}
           >
-            {loading ? "Generating..." : "Generate Message"}
+            {loading ? (
+              <>
+                <span className="bar-pop flex items-end gap-[3px]">
+                  <span /><span /><span /><span />
+                </span>
+                Generating
+              </>
+            ) : "Generate Message"}
           </button>
         </div>
 
@@ -87,9 +115,21 @@ export default function Home() {
             {error}
           </div>
         )}
+
         {message && (
-          <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4 text-sm leading-relaxed">
-            {message}
+          <div className="flex flex-col gap-3">
+            <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-4 text-sm leading-relaxed">
+              {message}
+            </div>
+            <button
+              onClick={handleSave}
+              disabled={saving || saved}
+              className="flex h-10 w-fit items-center justify-center rounded-full px-5 text-sm font-medium transition-colors disabled:opacity-60
+                bg-green-200 text-green-800 hover:bg-green-100/70
+                dark:bg-green-900/40 dark:text-green-300 dark:hover:bg-green-900/20"
+            >
+              {saved ? "✓ Added to Today's Action Items" : saving ? "Saving..." : "Add to Daily Task List"}
+            </button>
           </div>
         )}
       </main>

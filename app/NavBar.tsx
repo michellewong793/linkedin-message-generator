@@ -12,8 +12,11 @@ export async function NavBar() {
   if (!user) return null;
 
   return (
-    <nav className="fixed top-0 left-0 h-full w-48 flex flex-col border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black px-3 py-6">
+    <nav className="sticky top-0 h-screen w-48 shrink-0 flex flex-col border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black px-3 py-6">
       <div className="flex flex-col gap-1 flex-1">
+        <Link href="/action-items" className="rounded-full px-2 py-1 text-sm font-medium text-green-700/80 dark:text-green-500/70 bg-green-100/60 dark:bg-green-900/20 hover:bg-green-100/40 dark:hover:bg-green-900/10 transition-colors">
+          Today's Action Items
+        </Link>
         <Link href="/" className="rounded-md px-3 py-2 text-sm opacity-60 hover:opacity-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
           Generate Message
         </Link>
