@@ -8,6 +8,7 @@ const REASONS = [
   "Product launch",
   "AI investment signals",
   "General outreach",
+  "Custom reason",
 ];
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
   const [company, setCompany] = useState("");
   const [title, setTitle] = useState("");
   const [reason, setReason] = useState(REASONS[0]);
+  const [customReason, setCustomReason] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -29,7 +31,7 @@ export default function Home() {
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, company, title, reason }),
+      body: JSON.stringify({ name, company, title, reason: reason === "Custom reason" && customReason.trim() ? customReason.trim() : reason }),
     });
     const data = await res.json();
     if (data.error) {
@@ -87,12 +89,20 @@ export default function Home() {
             <select
               className="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground"
               value={reason}
-              onChange={(e) => setReason(e.target.value)}
+              onChange={(e) => { setReason(e.target.value); setCustomReason(""); }}
             >
               {REASONS.map((r) => (
                 <option key={r} value={r}>{r}</option>
               ))}
             </select>
+            {reason === "Custom reason" && (
+              <input
+                className="mt-1 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground"
+                placeholder="Describe your reason..."
+                value={customReason}
+                onChange={(e) => setCustomReason(e.target.value)}
+              />
+            )}
           </div>
           <button
             className="flex h-12 items-center justify-center gap-2 rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] disabled:opacity-50"

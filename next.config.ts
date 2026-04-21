@@ -5,6 +5,9 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
+  turbopack: {
+    root: __dirname,
+  },
 };
 
 export default nextConfig;
