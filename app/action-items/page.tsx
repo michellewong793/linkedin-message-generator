@@ -157,7 +157,7 @@ export default function ActionItemsPage() {
                 <p className="text-xs text-zinc-400 py-2">No potatoes yet.</p>
               )}
               {potatoes.map((p) => (
-                <div key={p.id} className="flex items-start gap-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-3 py-2">
+                <div key={p.id} className="flex items-start gap-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-900/60 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/60 transition-colors px-3 py-2">
                   <input
                     type="checkbox"
                     checked={p.done}
@@ -198,14 +198,8 @@ export default function ActionItemsPage() {
                 <p className="text-xs text-zinc-400 py-2">No SQOs yet.</p>
               )}
               {sqos.map((s) => (
-                <div key={s.id} className="flex items-center gap-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 px-3 py-2">
-                  <input
-                    type="checkbox"
-                    checked={s.done}
-                    onChange={(e) => toggleSqo(s.id, e.target.checked)}
-                    className="accent-zinc-600 shrink-0"
-                  />
-                  <p className={`text-sm flex-1 truncate ${s.done ? "line-through text-zinc-400" : ""}`}>
+                <div key={s.id} className="flex items-center gap-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-900/60 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/60 transition-colors px-3 py-2">
+                  <p className="text-sm flex-1 truncate">
                     {s.company || <span className="italic text-zinc-400">No company</span>}
                   </p>
                   <button onClick={() => deleteSqo(s.id)} className="text-zinc-300 hover:text-red-400 transition-colors shrink-0 text-xs">×</button>
