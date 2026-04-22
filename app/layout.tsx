@@ -30,7 +30,6 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <SpeedInsights/>
       <body className="min-h-full flex">
         <Suspense fallback={<div className="w-48 shrink-0 border-r border-zinc-200 dark:border-zinc-800" />}>
           <NavBar />
@@ -38,6 +37,7 @@ export default function RootLayout({
         <div className="flex flex-col flex-1 min-w-0">
           {children}
         </div>
+        <SpeedInsights />
       </body>
     </html>
   );

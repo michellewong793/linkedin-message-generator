@@ -4,11 +4,19 @@ import SignOutButton from "./SignOutButton";
 import SoundLink from "./SoundLink";
 
 export async function NavBar() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const { data: profile } = user
-    ? await supabase.from("profiles").select("first_name").eq("id", user.id).single()
-    : { data: null };
+  let user = null;
+  let profile = null;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+    if (user) {
+      const { data: p } = await supabase.from("profiles").select("first_name").eq("id", user.id).single();
+      profile = p;
+    }
+  } catch {
+    return null;
+  }
 
   if (!user) return null;
 
@@ -32,7 +40,7 @@ export async function NavBar() {
         <Link href="/" className="rounded-md px-3 py-2 text-sm opacity-60 hover:opacity-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
           Write Message
         </Link>
-<Link href="/call-prep" className="rounded-md px-3 py-2 text-sm opacity-60 hover:opacity-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
+        <Link href="/call-prep" className="rounded-md px-3 py-2 text-sm opacity-60 hover:opacity-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
           Prep Call
         </Link>
       </div>
