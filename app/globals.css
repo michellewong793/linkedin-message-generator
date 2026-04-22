@@ -25,6 +25,29 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.ginkgo-input {
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+.ginkgo-input:hover {
+  border-color: rgba(134, 239, 172, 0.5);
+}
+.ginkgo-input:focus {
+  outline: none;
+  border-color: rgba(74, 222, 128, 0.6);
+  color: #2d6a4f;
+  background-color: rgba(240, 253, 244, 0.4);
+}
+@media (prefers-color-scheme: dark) {
+  .ginkgo-input:hover {
+    border-color: rgba(74, 222, 128, 0.3);
+  }
+  .ginkgo-input:focus {
+    border-color: rgba(74, 222, 128, 0.5);
+    color: #86efac;
+    background-color: rgba(20, 83, 45, 0.15);
+  }
+}
+
 @keyframes bar-pop {
   0%, 100% { transform: scaleY(0.4); opacity: 0.5; }
   50%       { transform: scaleY(1);   opacity: 1; }

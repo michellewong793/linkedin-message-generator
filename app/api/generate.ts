@@ -36,14 +36,14 @@ const scrapeCompanyWebsite = tool({
 
 export async function POST(request: Request) {
     try {
-        const { name, company, title, reason } = await request.json();
+        const { name, company, title, reason, linkedinUrl } = await request.json();
         const companyUrl = `https://www.${company.toLowerCase().replace(/\s+/g, '')}.com`;
         const { text } = await generateText({
             model: gateway('anthropic/claude-sonnet-4-5'),
             tools: { scrapeCompanyWebsite },
             stopWhen: stepCountIs(3),
             system: 'You are a Vercel sales assistant. When given a task, execute it immediately using the available tools. Never ask for clarification — all required information is provided. Return only the final output with no preamble.',
-            prompt: `Scrape ${companyUrl} using the scrapeCompanyWebsite tool and look for signals that ${company} is investing in AI (job postings, blog posts, product features, partnerships). Then write a LinkedIn outreach message to ${name} (${title} at ${company}). The reason for reaching out is: "${reason}". Reference that reason and any relevant AI signals found, and explain how Vercel can help. Under 300 characters, no explanations.`,
+            prompt: `Scrape ${companyUrl} using the scrapeCompanyWebsite tool and look for signals that ${company} is investing in AI (job postings, blog posts, product features, partnerships).${linkedinUrl ? ` The prospect's LinkedIn profile is ${linkedinUrl} — use their background to personalize the message.` : ''} Then write a LinkedIn outreach message to ${name} (${title} at ${company}). The reason for reaching out is: "${reason}". Reference that reason and any relevant AI signals found, and explain how Vercel can help. Under 300 characters, no explanations.`,
         });
         return Response.json({ text });
     } catch (err) {

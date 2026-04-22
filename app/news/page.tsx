@@ -51,7 +51,7 @@ export default function NewsPage() {
 
         <div className="flex flex-col gap-4">
           <textarea
-            className="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground resize-none h-36"
+            className="ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm resize-none h-36"
             placeholder={"Stripe\nOpenAI\nAnthropic"}
             value={companiesInput}
             onChange={(e) => setCompaniesInput(e.target.value)}

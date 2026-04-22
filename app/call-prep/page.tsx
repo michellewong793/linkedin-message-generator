@@ -57,7 +57,7 @@ export default function CallPrepPage() {
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex flex-1 w-full max-w-3xl flex-col gap-8 py-32 px-16 bg-white dark:bg-black">
         <div>
-          <h1 className="text-2xl font-bold">Call Prep</h1>
+          <h1 className="text-xl font-medium">Prepare for a discovery call</h1>
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
             Enter a company name to get context, pain points, and discovery questions.
           </p>
@@ -65,7 +65,7 @@ export default function CallPrepPage() {
 
         <div className="flex gap-3">
           <input
-            className="flex-1 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground"
+            className="flex-1 ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm"
             placeholder="Company name"
             value={company}
             onChange={(e) => setCompany(e.target.value)}

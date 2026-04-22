@@ -56,7 +56,7 @@ export default function LoginPage() {
         <div className="flex flex-col gap-3">
           {mode === "signup" && (
             <input
-              className="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground"
+              className="ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm"
               type="text"
               placeholder="First name"
               value={firstName}
@@ -65,7 +65,7 @@ export default function LoginPage() {
             />
           )}
           <input
-            className="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground"
+            className="ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm"
             type="email"
             placeholder="Email"
             value={email}
@@ -73,7 +73,7 @@ export default function LoginPage() {
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           />
           <input
-            className="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground"
+            className="ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm"
             type="password"
             placeholder="Password"
             value={password}

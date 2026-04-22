@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Message Generator",
+  title: "Ginkgo",
   description: "Generate personalized outreach messages based on signals from company website",
 };
 

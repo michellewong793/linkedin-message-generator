@@ -27,13 +27,13 @@ export async function NavBar() {
       </div>
       <div className="flex flex-col gap-1 flex-1">
         <SoundLink href="/action-items" className="rounded-full px-2 py-1 text-sm font-medium text-green-700/80 dark:text-green-500/70 bg-green-100/60 dark:bg-green-900/20 hover:bg-green-100/40 dark:hover:bg-green-900/10 transition-colors">
-          Today's Action Items
+          Today
         </SoundLink>
         <Link href="/" className="rounded-md px-3 py-2 text-sm opacity-60 hover:opacity-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
-          Generate Message
+          Write Message
         </Link>
 <Link href="/call-prep" className="rounded-md px-3 py-2 text-sm opacity-60 hover:opacity-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
-          Call Prep
+          Prep Call
         </Link>
       </div>
       <div className="flex flex-col gap-1">

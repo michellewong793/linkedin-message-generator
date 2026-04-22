@@ -132,7 +132,7 @@ export default function ActionItemsPage() {
     <div className="flex flex-col flex-1 bg-white dark:bg-black font-sans min-h-screen">
       <main className="flex flex-1 w-full max-w-5xl flex-col gap-10 py-16 px-16">
         <div>
-          <h1 className="text-2xl font-bold">Today's Action Items</h1>
+          <h1 className="text-xl font-medium">Today</h1>
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
             {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
           </p>
@@ -274,13 +274,13 @@ export default function ActionItemsPage() {
         <Modal title="Add Potato" onClose={() => setShowPotatoModal(false)}>
           <div className="flex flex-col gap-3">
             <input
-              className="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground"
+              className="ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm"
               placeholder="Contact name (optional)"
               value={potatoName}
               onChange={(e) => setPotatoName(e.target.value)}
             />
             <input
-              className="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground"
+              className="ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm"
               placeholder="Company (optional)"
               value={potatoCompany}
               onChange={(e) => setPotatoCompany(e.target.value)}
@@ -302,7 +302,7 @@ export default function ActionItemsPage() {
         <Modal title="Add SQO" onClose={() => setShowSqoModal(false)}>
           <div className="flex flex-col gap-3">
             <input
-              className="rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-foreground"
+              className="ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-3 py-2 text-sm"
               placeholder="Company"
               value={sqoCompany}
               onChange={(e) => setSqoCompany(e.target.value)}
