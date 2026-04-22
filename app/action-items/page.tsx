@@ -49,6 +49,8 @@ export default function ActionItemsPage() {
   const [sqos, setSqos] = useState<Sqo[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [today, setToday] = useState("");
+
   const [showPotatoModal, setShowPotatoModal] = useState(false);
   const [potatoName, setPotatoName] = useState("");
   const [potatoCompany, setPotatoCompany] = useState("");
@@ -59,6 +61,7 @@ export default function ActionItemsPage() {
   const [savingSqo, setSavingSqo] = useState(false);
 
   useEffect(() => {
+    setToday(new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }));
     Promise.all([
       fetch("/api/action-items").then((r) => r.json()),
       fetch("/api/potatoes").then((r) => r.json()),
@@ -133,9 +136,7 @@ export default function ActionItemsPage() {
       <main className="flex flex-1 w-full max-w-5xl flex-col gap-10 py-16 px-16">
         <div>
           <h1 className="text-xl font-medium">Today</h1>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-          </p>
+          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{today}</p>
         </div>
 
         {/* Potatoes + SQOs side by side */}
