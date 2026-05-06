@@ -72,7 +72,7 @@ export default function CallPrepPage() {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
           <button
-            className="flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] disabled:opacity-50 whitespace-nowrap"
+            className="flex h-10 items-center justify-center rounded-full ginkgo-btn px-5 text-sm font-medium whitespace-nowrap"
             onClick={handleSearch}
             disabled={loading || !company.trim()}
           >

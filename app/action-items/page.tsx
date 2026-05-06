@@ -16,6 +16,7 @@ interface Potato {
   contact_name: string | null;
   company: string | null;
   done: boolean;
+  starred: boolean;
 }
 
 interface Sqo {
@@ -68,7 +69,7 @@ export default function ActionItemsPage() {
       fetch("/api/sqos").then((r) => r.json()),
     ]).then(([actionData, potatoData, sqoData]) => {
       if (actionData.items) setItems(actionData.items);
-      if (potatoData.items) setPotatoes(potatoData.items);
+      if (potatoData.items) setPotatoes([...potatoData.items].sort((a: Potato, b: Potato) => Number(b.starred) - Number(a.starred)));
       if (sqoData.items) setSqos(sqoData.items);
       setLoading(false);
     });
@@ -92,6 +93,14 @@ export default function ActionItemsPage() {
   async function togglePotato(id: string, done: boolean) {
     await fetch("/api/potatoes", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, done }) });
     setPotatoes((prev) => prev.map((p) => p.id === id ? { ...p, done } : p));
+  }
+
+  async function toggleStar(id: string, starred: boolean) {
+    await fetch("/api/potatoes", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, starred }) });
+    setPotatoes((prev) => {
+      const updated = prev.map((p) => p.id === id ? { ...p, starred } : p);
+      return [...updated].sort((a, b) => Number(b.starred) - Number(a.starred));
+    });
   }
 
   async function deletePotato(id: string) {
@@ -158,7 +167,7 @@ export default function ActionItemsPage() {
                 <p className="text-xs text-zinc-400 py-2">No potatoes yet.</p>
               )}
               {potatoes.map((p) => (
-                <div key={p.id} className="flex items-start gap-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-900/60 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/60 transition-colors px-3 py-2">
+                <div key={p.id} className={`flex items-start gap-2 rounded-lg border px-3 py-2 transition-colors ${p.starred ? "border-amber-200 dark:border-amber-800/50 bg-amber-50/60 dark:bg-amber-900/10" : "border-zinc-200 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-900/60 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/60"}`}>
                   <input
                     type="checkbox"
                     checked={p.done}
@@ -176,6 +185,13 @@ export default function ActionItemsPage() {
                       <p className="text-xs text-zinc-400 italic">No details</p>
                     )}
                   </div>
+                  <button
+                    onClick={() => toggleStar(p.id, !p.starred)}
+                    className={`shrink-0 text-sm transition-colors ${p.starred ? "text-amber-400" : "text-zinc-300 hover:text-amber-300"}`}
+                    title={p.starred ? "Unstar" : "Star"}
+                  >
+                    {p.starred ? "★" : "☆"}
+                  </button>
                   <button onClick={() => deletePotato(p.id)} className="text-zinc-300 hover:text-red-400 transition-colors shrink-0 text-xs">×</button>
                 </div>
               ))}

@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import SignOutButton from "./SignOutButton";
-import SoundLink from "./SoundLink";
+import NavLinks from "./NavLinks";
 
 export async function NavBar() {
   let user = null;
@@ -34,15 +33,7 @@ export async function NavBar() {
         <span className="font-semibold text-xl tracking-tight">Ginkgo</span>
       </div>
       <div className="flex flex-col gap-1 flex-1">
-        <SoundLink href="/action-items" className="rounded-full px-2 py-1 text-sm font-medium text-green-700/80 dark:text-green-500/70 bg-green-100/60 dark:bg-green-900/20 hover:bg-green-100/40 dark:hover:bg-green-900/10 transition-colors">
-          Today
-        </SoundLink>
-        <Link href="/" className="rounded-md px-3 py-2 text-sm opacity-60 hover:opacity-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
-          Write Message
-        </Link>
-        <Link href="/call-prep" className="rounded-md px-3 py-2 text-sm opacity-60 hover:opacity-100 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors">
-          Prep Call
-        </Link>
+        <NavLinks />
       </div>
       <div className="flex flex-col gap-1">
         <p className="px-3 text-xs text-zinc-400 truncate">

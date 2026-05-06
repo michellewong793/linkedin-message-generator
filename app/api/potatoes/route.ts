@@ -36,10 +36,13 @@ export async function PATCH(request: Request) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { id, done } = await request.json();
+    const { id, done, starred } = await request.json();
+    const update: Record<string, unknown> = {};
+    if (done !== undefined) update.done = done;
+    if (starred !== undefined) update.starred = starred;
     const { error } = await supabase
         .from('potatoes')
-        .update({ done })
+        .update(update)
         .eq('id', id)
         .eq('user_id', user.id);
 

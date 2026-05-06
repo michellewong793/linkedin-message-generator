@@ -47,10 +47,19 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 dark:bg-black font-sans">
-      <div className="w-full max-w-sm flex flex-col gap-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8">
-        <h1 className="text-xl font-bold">
-          {mode === "login" ? "Sign in" : "Create account"}
+    <div className="flex min-h-screen items-center justify-center bg-[#f9faf8] dark:bg-black font-sans">
+      <div className="w-full max-w-sm flex flex-col gap-6 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl p-8 shadow-sm">
+        <div className="flex flex-col items-center gap-2 pb-2">
+          <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="50" y1="100" x2="50" y2="62" stroke="#4ade80" strokeWidth="6" strokeLinecap="round"/>
+            <path d="M50 62 C50 62 18 58 10 30 C4 10 28 2 40 16 C46 23 50 38 50 62Z" fill="#4ade80" opacity="0.85"/>
+            <path d="M50 62 C50 62 82 58 90 30 C96 10 72 2 60 16 C54 23 50 38 50 62Z" fill="#4ade80"/>
+          </svg>
+          <span className="font-semibold text-xl tracking-tight">Ginkgo</span>
+          <p className="text-xs text-zinc-400 text-center">Your AI-powered sales sidekick</p>
+        </div>
+        <h1 className="text-base font-semibold text-center -mt-2">
+          {mode === "login" ? "Welcome back" : "Create your account"}
         </h1>
 
         <div className="flex flex-col gap-3">
@@ -81,7 +90,7 @@ export default function LoginPage() {
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           />
           <button
-            className="flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] disabled:opacity-50"
+            className="flex h-10 items-center justify-center rounded-full ginkgo-btn px-5 text-sm font-medium"
             onClick={handleSubmit}
             disabled={loading || !email || !password || (mode === "signup" && !firstName)}
           >

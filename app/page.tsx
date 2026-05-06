@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
 const REASONS = [
   "New funding round",
@@ -20,11 +21,15 @@ interface GeneratedMessage {
   text: string;
 }
 
-export default function Home() {
-  const [name, setName] = useState("");
-  const [company, setCompany] = useState("");
-  const [title, setTitle] = useState("");
-  const [reason, setReason] = useState(REASONS[0]);
+function HomeInner() {
+  const searchParams = useSearchParams();
+  const [name, setName] = useState(searchParams.get("name") ?? "");
+  const [company, setCompany] = useState(searchParams.get("company") ?? "");
+  const [title, setTitle] = useState(searchParams.get("title") ?? "");
+  const [reason, setReason] = useState(() => {
+    const r = searchParams.get("reason");
+    return r && REASONS.includes(r) ? r : REASONS[0];
+  });
   const [customReason, setCustomReason] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [messages, setMessages] = useState<GeneratedMessage[]>([]);
@@ -143,7 +148,7 @@ export default function Home() {
             )}
           </div>
           <button
-            className="flex h-12 items-center justify-center gap-2 rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] disabled:opacity-50"
+            className="flex h-12 items-center justify-center gap-2 rounded-full ginkgo-btn px-5 text-sm font-medium"
             onClick={handleGenerate}
             disabled={loading || !name || !company || !title}
           >
@@ -196,7 +201,7 @@ export default function Home() {
             {messages.map((m) => (
               <div
                 key={m.id}
-                className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-5 flex flex-col gap-3"
+                className="ginkgo-card rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-5 flex flex-col gap-3"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
@@ -218,5 +223,13 @@ export default function Home() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense>
+      <HomeInner />
+    </Suspense>
   );
 }
