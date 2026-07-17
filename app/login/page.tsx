@@ -3,16 +3,24 @@ import { useState, Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 
+type Mode = "login" | "signup" | "magic-link" | "forgot-password";
+
 function LoginPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [mode, setMode] = useState<Mode>("login");
   const [error, setError] = useState<string | null>(searchParams.get("error"));
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  function switchMode(next: Mode) {
+    setMode(next);
+    setError(null);
+    setMessage(null);
+  }
 
   async function handleSubmit() {
     setLoading(true);
@@ -29,7 +37,7 @@ function LoginPageInner() {
         router.push("/");
         router.refresh();
       }
-    } else {
+    } else if (mode === "signup") {
       const { data, error } = await supabase.auth.signUp({ email, password });
       if (error) {
         setError(error.message);
@@ -42,10 +50,43 @@ function LoginPageInner() {
         }
         setMessage("Check your email to confirm your account.");
       }
+    } else if (mode === "magic-link") {
+      const { error } = await supabase.auth.signInWithOtp({ email });
+      if (error) setError(error.message);
+      else setMessage("Check your email for a magic link to sign in.");
+    } else if (mode === "forgot-password") {
+      const { error } = await supabase.auth.resetPasswordForEmail(email);
+      if (error) setError(error.message);
+      else setMessage("Check your email for a link to reset your password.");
     }
 
     setLoading(false);
   }
+
+  const isPasswordMode = mode === "login" || mode === "signup";
+  const canSubmit =
+    !!email &&
+    (mode === "magic-link" ||
+      mode === "forgot-password" ||
+      (!!password && (mode === "login" || !!firstName)));
+
+  const heading =
+    mode === "login"
+      ? "Welcome back"
+      : mode === "signup"
+      ? "Create your account"
+      : mode === "magic-link"
+      ? "Sign in with a magic link"
+      : "Reset your password";
+
+  const submitLabel =
+    mode === "login"
+      ? "Sign in"
+      : mode === "signup"
+      ? "Sign up"
+      : mode === "magic-link"
+      ? "Send magic link"
+      : "Send reset link";
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#f9faf8] dark:bg-black font-sans">
@@ -59,9 +100,7 @@ function LoginPageInner() {
           <span className="font-semibold text-xl tracking-tight">Ginkgo</span>
           <p className="text-xs text-zinc-400 text-center">Your AI-powered sales sidekick</p>
         </div>
-        <h1 className="text-base font-semibold text-center -mt-2">
-          {mode === "login" ? "Welcome back" : "Create your account"}
-        </h1>
+        <h1 className="text-base font-semibold text-center -mt-2">{heading}</h1>
 
         <div className="flex flex-col gap-3">
           {mode === "signup" && (
@@ -82,21 +121,39 @@ function LoginPageInner() {
             onChange={(e) => setEmail(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           />
-          <input
-            className="ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-          />
+          {isPasswordMode && (
+            <input
+              className="ginkgo-input rounded-lg border border-zinc-300 dark:border-zinc-700 bg-transparent px-4 py-2 text-sm"
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+            />
+          )}
+          {mode === "login" && (
+            <button
+              className="text-xs text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors text-right -mt-1"
+              onClick={() => switchMode("forgot-password")}
+            >
+              Forgot password?
+            </button>
+          )}
           <button
             className="flex h-10 items-center justify-center rounded-full ginkgo-btn px-5 text-sm font-medium"
             onClick={handleSubmit}
-            disabled={loading || !email || !password || (mode === "signup" && !firstName)}
+            disabled={loading || !canSubmit}
           >
-            {loading ? "..." : mode === "login" ? "Sign in" : "Sign up"}
+            {loading ? "..." : submitLabel}
           </button>
+          {mode === "login" && (
+            <button
+              className="text-sm text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+              onClick={() => switchMode("magic-link")}
+            >
+              Email me a magic link instead
+            </button>
+          )}
         </div>
 
         {error && (
@@ -106,12 +163,21 @@ function LoginPageInner() {
           <p className="text-sm text-zinc-600 dark:text-zinc-400">{message}</p>
         )}
 
-        <button
-          className="text-sm text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors text-left"
-          onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(null); setMessage(null); }}
-        >
-          {mode === "login" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
-        </button>
+        {mode === "login" || mode === "signup" ? (
+          <button
+            className="text-sm text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors text-left"
+            onClick={() => switchMode(mode === "login" ? "signup" : "login")}
+          >
+            {mode === "login" ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+          </button>
+        ) : (
+          <button
+            className="text-sm text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors text-left"
+            onClick={() => switchMode("login")}
+          >
+            Back to sign in
+          </button>
+        )}
       </div>
     </div>
   );
