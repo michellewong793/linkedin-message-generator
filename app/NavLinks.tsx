@@ -38,6 +38,7 @@ export default function NavLinks() {
         Today
       </SoundLink>
       {navLink("/signals", "Signals")}
+      {navLink("/hot-hobbies", "Hot Hobbies")}
       {navLink("/", "Write Message")}
       {navLink("/call-prep", "Prep Call")}
     </>
