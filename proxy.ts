@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 export async function proxy(request: NextRequest) {
     const isLoginPage = request.nextUrl.pathname.startsWith('/login');
-    const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/callback');
+    const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/');
 
     try {
         let supabaseResponse = NextResponse.next({ request });
