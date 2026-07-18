@@ -34,7 +34,7 @@ function LoginPageInner() {
       if (error) {
         setError(error.message);
       } else {
-        router.push("/");
+        router.push("/hot-hobbies");
         router.refresh();
       }
     } else if (mode === "signup") {

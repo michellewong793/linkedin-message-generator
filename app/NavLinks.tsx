@@ -1,13 +1,12 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import SoundLink from "./SoundLink";
 
 export default function NavLinks() {
   const pathname = usePathname();
 
   const navLink = (href: string, label: string) => {
-    const isActive = href === "/" ? pathname === "/" : pathname.startsWith(href);
+    const isActive = pathname.startsWith(href);
     return (
       <Link
         key={href}
@@ -23,24 +22,5 @@ export default function NavLinks() {
     );
   };
 
-  const todayActive = pathname === "/action-items";
-
-  return (
-    <>
-      <SoundLink
-        href="/action-items"
-        className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-          todayActive
-            ? "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400"
-            : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-900"
-        }`}
-      >
-        Today
-      </SoundLink>
-      {navLink("/signals", "Signals")}
-      {navLink("/hot-hobbies", "Hot Hobbies")}
-      {navLink("/", "Write Message")}
-      {navLink("/call-prep", "Prep Call")}
-    </>
-  );
+  return <>{navLink("/hot-hobbies", "Hot Hobbies")}</>;
 }
