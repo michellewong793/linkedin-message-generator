@@ -51,11 +51,16 @@ function LoginPageInner() {
         setMessage("Check your email to confirm your account.");
       }
     } else if (mode === "magic-link") {
-      const { error } = await supabase.auth.signInWithOtp({ email });
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: `${window.location.origin}/auth/confirm` },
+      });
       if (error) setError(error.message);
       else setMessage("Check your email for a magic link to sign in.");
     } else if (mode === "forgot-password") {
-      const { error } = await supabase.auth.resetPasswordForEmail(email);
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/confirm`,
+      });
       if (error) setError(error.message);
       else setMessage("Check your email for a link to reset your password.");
     }
