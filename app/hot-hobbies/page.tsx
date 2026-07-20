@@ -8,6 +8,7 @@ const TITLE_KEYWORDS = [
   "Vice President",
   "Platform",
   "Infrastructure",
+  "VP of",  "Head of", "CTO", "Staff", "Founding", "Co", "Principal", "Software" 
 ];
 // "AI" is matched as a whole word so we don't catch "maintenance", "retail", etc.
 const AI_WORD = /\bAI\b/i;
